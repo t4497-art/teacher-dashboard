@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-apple-blue: #0071e3;
+  --color-apple-gray-light: #f5f5f7;
+  --color-apple-gray-dark: #1c1c1e;
+  --color-glass-card-bg: rgba(255, 255, 255, 0.72);
+  --color-glass-card-border: rgba(255, 255, 255, 0.4);
+  --color-glass-card-bg-dark: rgba(28, 28, 30, 0.72);
+  --color-glass-card-border-dark: rgba(255, 255, 255, 0.08);
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-scale-up: scale-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-wiggle: wiggle 0.5s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-up {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+/* Base custom resets matching design */
+html, body {
+  font-family: var(--font-sans);
+  color: #000000;
+}
+
+.dark html, .dark body {
+  color: #f5f5f7;
+}
+
+/* Glassmorphism custom components with boosted opacity for high-contrast readability */
+.glass-effect {
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  background-color: rgba(255, 255, 255, 0.90); /* Increased from 0.72 for supreme contrast */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 40px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
+  border-radius: 24px;
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  color: #000000; /* Black text by default on widgets */
+}
+
+/* Ensure inside light mode, text tags are highly readable black */
+:not(.dark) .glass-effect,
+:not(.dark) .glass-effect span,
+:not(.dark) .glass-effect p,
+:not(.dark) .glass-effect table,
+:not(.dark) .glass-effect text {
+  color: #000000;
+}
+
+.dark .glass-effect {
+  background-color: rgba(15, 23, 42, 0.90); /* Deep high-contrast slate-900 background */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.45), 0 4px 12px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Custom drag and drop regions mapping Electron */
+.drag-handle {
+  cursor: grab;
+}
+.drag-handle:active {
+  cursor: grabbing;
+}
+.no-drag {
+  cursor: default;
+}
+
+/* Webkit Scrollbar override for clean look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* --- Interactive Elements Pastel Tone Styling for all widgets --- */
+.glass-effect button {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Base default buttons in light mode: Soft cool grey pastel */
+:not(.dark) .glass-effect button {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+}
+:not(.dark) .glass-effect button:hover:not(:disabled) {
+  background-color: #e5e7eb;
+  border-color: #d1d5db;
+  color: #111827;
+}
+:not(.dark) .glass-effect button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+/* Specific colored button mappings in light mode using background keyword detection */
+:not(.dark) .glass-effect button[class*="bg-apple-blue"],
+:not(.dark) .glass-effect button[class*="bg-indigo-600"],
+:not(.dark) .glass-effect button[class*="bg-indigo-605"],
+:not(.dark) .glass-effect button[class*="bg-blue-600"],
+:not(.dark) .glass-effect button[class*="bg-sky-"],
+:not(.dark) .glass-effect button[class*="bg-indigo-"] {
+  background-color: #e0f2fe !important; /* Soft pastel sky blue */
+  color: #0369a1 !important; /* Rich readable deep sky blue representation */
+  border: 1px solid #bae6fd !important;
+}
+:not(.dark) .glass-effect button[class*="bg-apple-blue"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-indigo-600"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-indigo-605"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-blue-650"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-sky-"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-indigo-"]:hover:not(:disabled) {
+  background-color: #bae6fd !important;
+  color: #0c4a6e !important;
+  border-color: #7dd3fc !important;
+}
+
+:not(.dark) .glass-effect button[class*="bg-emerald"],
+:not(.dark) .glass-effect button[class*="bg-green-600"],
+:not(.dark) .glass-effect button[class*="bg-teal-500"] {
+  background-color: #dcfce7 !important; /* Soft pastel mint */
+  color: #15803d !important; /* High contrast mint text */
+  border: 1px solid #bbf7d0 !important;
+}
+:not(.dark) .glass-effect button[class*="bg-emerald"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-green-600"]:hover:not(:disabled) {
+  background-color: #bbf7d0 !important;
+  color: #166534 !important;
+  border-color: #86efac !important;
+}
+
+:not(.dark) .glass-effect button[class*="bg-rose-600"],
+:not(.dark) .glass-effect button[class*="bg-red-500"],
+:not(.dark) .glass-effect button[class*="bg-pink-500"],
+:not(.dark) .glass-effect button[class*="bg-pink-600"] {
+  background-color: #ffe4e6 !important; /* Soft pastel pink/coral */
+  color: #b91c1c !important;
+  border: 1px solid #fecdd3 !important;
+}
+:not(.dark) .glass-effect button[class*="bg-rose-600"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-red-500"]:hover:not(:disabled),
+:not(.dark) .glass-effect button[class*="bg-pink-500"]:hover:not(:disabled) {
+  background-color: #fecdd3 !important;
+  color: #991b1b !important;
+  border-color: #fda4af !important;
+}
+
+:not(.dark) .glass-effect button[class*="bg-violet"],
+:not(.dark) .glass-effect button[class*="bg-purple"],
+:not(.dark) .glass-effect button[class*="bg-fuchsia"] {
+  background-color: #f3e8ff !important; /* Soft pastel lavender */
+  color: #6b21a8 !important;
+  border: 1px solid #e9d5ff !important;
+}
+:not(.dark) .glass-effect button[class*="bg-violet"]:hover:not(:disabled) {
+  background-color: #e9d5ff !important;
+  color: #581c87 !important;
+  border-color: #d8b4fe !important;
+}
+
+:not(.dark) .glass-effect button[class*="bg-amber-"],
+:not(.dark) .glass-effect button[class*="bg-orange-"],
+:not(.dark) .glass-effect button[class*="bg-yellow-"],
+:not(.dark) .glass-effect button[class*="bg-amber-500"] {
+  background-color: #fef3c7 !important; /* Soft pastel peach/gold */
+  color: #b45309 !important;
+  border: 1px solid #fde68a !important;
+}
+:not(.dark) .glass-effect button[class*="bg-amber-"]:hover:not(:disabled) {
+  background-color: #fde68a !important;
+  color: #92400e !important;
+  border-color: #fcd34d !important;
+}
+
+/* --- Dark Mode Pastel Colors (Glowing, translucent pastel variants) --- */
+.dark .glass-effect button {
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.dark .glass-effect button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+.dark .glass-effect button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.dark .glass-effect button[class*="bg-apple-blue"],
+.dark .glass-effect button[class*="bg-indigo-600"],
+.dark .glass-effect button[class*="bg-indigo-605"],
+.dark .glass-effect button[class*="bg-blue-600"],
+.dark .glass-effect button[class*="bg-sky-"],
+.dark .glass-effect button[class*="bg-indigo-"] {
+  background-color: rgba(56, 189, 248, 0.15) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+}
+.dark .glass-effect button[class*="bg-apple-blue"]:hover:not(:disabled),
+.dark .glass-effect button[class*="bg-indigo-600"]:hover:not(:disabled) {
+  background-color: rgba(56, 189, 248, 0.28) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+}
+
+.dark .glass-effect button[class*="bg-emerald"],
+.dark .glass-effect button[class*="bg-green-600"],
+.dark .glass-effect button[class*="bg-teal-500"] {
+  background-color: rgba(52, 211, 153, 0.15) !important;
+  color: #6ee7b7 !important;
+  border: 1px solid rgba(52, 211, 153, 0.35) !important;
+}
+.dark .glass-effect button[class*="bg-emerald"]:hover:not(:disabled) {
+  background-color: rgba(52, 211, 153, 0.28) !important;
+  border-color: rgba(52, 211, 153, 0.5) !important;
+}
+
+.dark .glass-effect button[class*="bg-rose-600"],
+.dark .glass-effect button[class*="bg-red-500"],
+.dark .glass-effect button[class*="bg-pink-500"],
+.dark .glass-effect button[class*="bg-pink-600"] {
+  background-color: rgba(251, 113, 133, 0.15) !important;
+  color: #fda4af !important;
+  border: 1px solid rgba(251, 113, 133, 0.35) !important;
+}
+.dark .glass-effect button[class*="bg-rose-600"]:hover:not(:disabled) {
+  background-color: rgba(251, 113, 133, 0.28) !important;
+  border-color: rgba(251, 113, 133, 0.5) !important;
+}
+
+.dark .glass-effect button[class*="bg-violet"],
+.dark .glass-effect button[class*="bg-purple"],
+.dark .glass-effect button[class*="bg-fuchsia"] {
+  background-color: rgba(167, 139, 250, 0.15) !important;
+  color: #c084fc !important;
+  border: 1px solid rgba(167, 139, 250, 0.35) !important;
+}
+.dark .glass-effect button[class*="bg-violet"]:hover:not(:disabled) {
+  background-color: rgba(167, 139, 250, 0.28) !important;
+  border-color: rgba(167, 139, 250, 0.5) !important;
+}
+
+.dark .glass-effect button[class*="bg-amber-"],
+.dark .glass-effect button[class*="bg-orange-"],
+.dark .glass-effect button[class*="bg-yellow-"],
+.dark .glass-effect button[class*="bg-amber-500"] {
+  background-color: rgba(251, 191, 36, 0.15) !important;
+  color: #fde047 !important;
+  border: 1px solid rgba(251, 191, 36, 0.35) !important;
+}
+.dark .glass-effect button[class*="bg-amber-"]:hover:not(:disabled) {
+  background-color: rgba(251, 191, 36, 0.28) !important;
+  border-color: rgba(251, 191, 36, 0.5) !important;
+}
+
+/* --- Interactive Elements Pastel Tone Styling for Inputs, Textareas, Selects and Dropdowns --- */
+.glass-effect input[type="text"],
+.glass-effect input[type="number"],
+.glass-effect input[type="date"],
+.glass-effect textarea,
+.glass-effect select,
+input.pastel-input,
+select.pastel-select {
+  background-color: #eff6ff !important; /* Soft pastel sky/indigo blue */
+  border: 1px solid #bfdbfe !important;
+  color: #1d4ed8 !important;
+  border-radius: 8px;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.glass-effect input[type="text"]:focus,
+.glass-effect input[type="number"]:focus,
+.glass-effect input[type="date"]:focus,
+.glass-effect textarea:focus,
+.glass-effect select:focus {
+  background-color: #f8fafc !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+}
+
+/* select browser options styling override */
+.glass-effect select option {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  font-weight: 600;
+}
+
+.dark .glass-effect select option {
+  background-color: #0f172a !important;
+  color: #93c5fd !important;
+}
+
+/* Force dark mode pastels */
+.dark .glass-effect input[type="text"],
+.dark .glass-effect input[type="number"],
+.dark .glass-effect input[type="date"],
+.dark .glass-effect textarea,
+.dark .glass-effect select {
+  background-color: rgba(30, 41, 59, 0.72) !important;
+  border: 1px solid rgba(147, 197, 253, 0.25) !important;
+  color: #93c5fd !important;
+}
+
+.dark .glass-effect input[type="text"]:focus,
+.dark .glass-effect input[type="number"]:focus,
+.dark .glass-effect input[type="date"]:focus,
+.dark .glass-effect textarea:focus,
+.dark .glass-effect select:focus {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  border-color: #60a5fa !important;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2) !important;
+}
+

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>교사용 위젯 대시보드</title>
+    <style>
+      html, body {
+        background: transparent !important;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* 위젯 영역 바깥 스크롤바 방지 */
+        height: 100%;
+        width: 100%;
+      }
+      #root {
+        height: 100%;
+        width: 100%;
+        background: transparent !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <!-- Electron Click-through Helper -->
+    <script>
+      (function() {
+        const isElectron = navigator.userAgent.toLowerCase().includes('electron');
+        if (isElectron) {
+          window.addEventListener('DOMContentLoaded', () => {
+            let lastIgnore = null;
+            window.addEventListener('mousemove', (event) => {
+              try {
+                // If a drag/resize/interaction is currently active, DO NOT ignore mouse events!
+                // This ensures that the cursor never slips off the widget during fast movement and stays perfectly focused.
+                const isInteracting = document.body.classList.contains('widget-interacting');
+                if (isInteracting) {
+                  if (lastIgnore !== false) {
+                    lastIgnore = false;
+                    const electron = window.require ? window.require('electron') : null;
+                    if (electron && electron.ipcRenderer) {
+                      electron.ipcRenderer.send('set-ignore-mouse-events', false);
+                    }
+                  }
+                  return;
+                }
+
+                // Find the element directly under the cursor
+                const element = document.elementFromPoint(event.clientX, event.clientY);
+                
+                // Check if the element or any of its parents is part of an interactive widget, navigation or portal
+                const isInteractive = element && (
+                  element.closest('.glass-effect') ||
+                  element.closest('nav') ||
+                  element.closest('button') ||
+                  element.closest('input, select, textarea, a') ||
+                  element.closest('.no-drag') ||
+                  element.closest('.drag-handle') ||
+                  element.closest('.z-45') || // Settings Drawer
+                  element.closest('.z-50')    // Dialog modals / system alerts
+                );
+
+                const isMainBg = !isInteractive;
+
+                const electron = window.require ? window.require('electron') : null;
+                if (electron && electron.ipcRenderer) {
+                  if (isMainBg !== lastIgnore) {
+                    lastIgnore = isMainBg;
+                    if (isMainBg) {
+                      // Over transparent wallpaper: Allow mouse click-through
+                      electron.ipcRenderer.send('set-ignore-mouse-events', true, { forward: true });
+                    } else {
+                      // Over interactive widgets: Capture click
+                      electron.ipcRenderer.send('set-ignore-mouse-events', false);
+                    }
+                  }
+                }
+              } catch (e) {
+                // Fail-safe protection
+              }
+            });
+          });
+        }
+      })();
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

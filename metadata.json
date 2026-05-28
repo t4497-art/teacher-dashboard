@@ -1,0 +1,6 @@
+{
+  "name": "PC Local Teacher Widget Dashboard",
+  "description": "A high-performance Apple-style desktop widget dashboard for teachers with student rosters, lesson tools, schedules, and NEIS integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
